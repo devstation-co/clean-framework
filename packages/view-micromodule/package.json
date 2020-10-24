@@ -1,6 +1,6 @@
 {
 	"name": "@clean-framework/view-micromodule",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"license": "MIT",
 	"author": "Mohamed Oualid Sellal <oualid.sellal@gmail.com>",
 	"main": "package.js",
@@ -8,7 +8,6 @@
 	"scripts": {
 		"build": "babel src --out-dir dist --root-mode upward --ignore **/*.test.js"
 	},
-	"dependencies": {},
 	"devDependencies": {
 		"@babel/cli": "^7.11.6",
 		"@babel/core": "^7.11.6",
