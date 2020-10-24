@@ -17,5 +17,6 @@
 		"@babel/preset-env": "^7.11.5",
 		"babel-jest": "^26.3.0",
 		"jest": "^26.4.2"
-	}
+	},
+	"gitHead": "23665bdabd2cbc1a3094cf53a0d9a75b39fdda5c"
 }

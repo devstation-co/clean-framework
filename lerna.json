@@ -2,9 +2,6 @@
 	"packages": [
 		"packages/*"
 	],
-	"publish": {
-		"registry": "https://gitlab.com/api/v4/projects/21990351/packages/npm/"
-	},
 	"version": "1.0.0",
 	"npmClient": "yarn",
 	"useWorkspaces": true,

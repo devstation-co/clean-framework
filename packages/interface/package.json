@@ -21,5 +21,5 @@
 	"publishConfig": {
 		"@clean-framework:registry": "https://gitlab.com/api/v4/projects/21990351/packages/npm/"
 	},
-	"gitHead": "972f09fc3a0f04fe95b8d049b30efb9535a93f36"
+	"gitHead": "23665bdabd2cbc1a3094cf53a0d9a75b39fdda5c"
 }
