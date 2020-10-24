@@ -19,7 +19,7 @@
 		"jest": "^26.4.2"
 	},
 	"publishConfig": {
-		"@clean-framework:registry": "https://gitlab.com/api/v4/projects/21990351/packages/npm/"
-	},
-	"gitHead": "23665bdabd2cbc1a3094cf53a0d9a75b39fdda5c"
+		"access": "public"
+	  },
+	"gitHead": "cd45984d5967579d1f74628eac7707424afcd2bc"
 }
