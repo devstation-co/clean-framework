@@ -1,0 +1,24 @@
+{
+	"name": "@clean-framework/interface",
+	"version": "1.0.0",
+	"license": "MIT",
+	"author": "Mohamed Oualid Sellal <oualid.sellal@gmail.com>",
+	"main": "package.js",
+	"scripts": {
+		"build": "babel src --out-dir dist --root-mode upward --ignore **/*.test.js"
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.11.6",
+		"@babel/core": "^7.11.6",
+		"@babel/node": "^7.10.5",
+		"@babel/plugin-proposal-class-properties": "^7.10.4",
+		"@babel/plugin-proposal-private-methods": "^7.10.4",
+		"@babel/preset-env": "^7.11.5",
+		"babel-jest": "^26.3.0",
+		"jest": "^26.4.2"
+	},
+	"publishConfig": {
+		"@devstation-os:registry": "https://gitlab.com/api/v4/projects/21990351/packages/npm/"
+	},
+	"gitHead": "972f09fc3a0f04fe95b8d049b30efb9535a93f36"
+}
