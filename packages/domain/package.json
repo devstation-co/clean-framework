@@ -4,7 +4,11 @@
 	"license": "MIT",
 	"author": "Mohamed Oualid Sellal <oualid.sellal@gmail.com>",
 	"main": "package.js",
-	"repository": "github.com/devstation-co/clean-framework",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/devstation-co/clean-framework",
+		"directory": "packages/domain"
+	},
 	"scripts": {
 		"build": "babel src --out-dir dist --root-mode upward --ignore **/*.test.js"
 	},
