@@ -1,4 +1,4 @@
-export default class CliInterfaceMicromodule {
+export default class CliInterface {
 	constructor({ commands, controllers, application, infrastructure }) {
 		this.cli = infrastructure.cli;
 		this.commands = [];
@@ -20,13 +20,13 @@ export default class CliInterfaceMicromodule {
 	async run() {
 		await this.cli.registerCommands(this.commands);
 		await this.cli.run();
-		const successEvent = {
-			name: 'commandsApiInitialized',
-			createdAt: new Date(),
+		const response = {
+			status: 'success',
+			timestamp: new Date(),
 			payload: {
 				version: this.version,
 			},
 		};
-		return successEvent;
+		return response;
 	}
 }
