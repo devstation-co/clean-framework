@@ -5,7 +5,7 @@ export default class WebsocketApiInterfaceMicromodule {
 
 	#websocketServer;
 
-	constructor({ micromodules, requests, controllers, middlewares, infrastructure, application }) {
+	constructor({ plugins, requests, controllers, middlewares, infrastructure, application }) {
 		this.#websocketServer = infrastructure.websocketServer;
 		this.#middlewares = {
 			requestMiddlewares: {},
@@ -31,24 +31,24 @@ export default class WebsocketApiInterfaceMicromodule {
 				});
 			}
 		}
-		if (micromodules) {
-			micromodules.forEach((Micromodule) => {
-				const micromodule = new Micromodule();
-				const micromoduleName = micromodule.name;
-				micromodule.requests.forEach((request) => {
+		if (plugins) {
+			plugins.forEach((Plugin) => {
+				const plugin = new Plugin();
+				const pluginName = plugin.name;
+				plugin.requests.forEach((request) => {
 					let controller;
-					if (typeof micromodule.controllers[request.controller] === 'function') {
-						controller = micromodule.controllers[request.controller];
+					if (typeof plugin.controllers[request.controller] === 'function') {
+						controller = plugin.controllers[request.controller];
 					} else if (
 						!request.controller &&
-						typeof micromodule.controllers[request.name] === 'function'
+						typeof plugin.controllers[request.name] === 'function'
 					) {
-						controller = micromodule.controllers[request.name];
+						controller = plugin.controllers[request.name];
 					} else {
 						throw new Error(`Request ${request.name} controller undefined`);
 					}
 					const newRequest = {
-						name: `${micromoduleName}.${request.name}`,
+						name: `${pluginName}.${request.name}`,
 						middlewares: request.middlewares,
 						controller: controller({
 							infrastructure,
@@ -57,23 +57,21 @@ export default class WebsocketApiInterfaceMicromodule {
 					};
 					this.#requests.push(newRequest);
 				});
-				if (micromodule.middlewares) {
-					if (micromodule.middlewares.requestMiddlewares) {
-						Object.keys(micromodule.middlewares.requestMiddlewares).forEach((middleware) => {
-							const newMiddleware = micromodule.middlewares.requestMiddlewares[`${middleware}`]({
+				if (plugin.middlewares) {
+					if (plugin.middlewares.requestMiddlewares) {
+						Object.keys(plugin.middlewares.requestMiddlewares).forEach((middleware) => {
+							const newMiddleware = plugin.middlewares.requestMiddlewares[`${middleware}`]({
 								infrastructure,
 								application,
 							});
-							this.#middlewares.requestMiddlewares[
-								`${micromoduleName}.${middleware}`
-							] = newMiddleware;
+							this.#middlewares.requestMiddlewares[`${pluginName}.${middleware}`] = newMiddleware;
 						});
 					}
-					if (micromodule.middlewares.ioMiddlewares) {
-						micromodule.middlewares.ioMiddlewares.forEach((middleware) => {
+					if (plugin.middlewares.ioMiddlewares) {
+						plugin.middlewares.ioMiddlewares.forEach((middleware) => {
 							const newMiddleware = middleware({ infrastructure, application });
 							if (this.#middlewares.ioMiddlewares.indexOf(newMiddleware) !== -1)
-								throw new Error(`Duplicate io middleware detected in ${micromoduleName}`);
+								throw new Error(`Duplicate io middleware detected in ${pluginName}`);
 							this.#middlewares.ioMiddlewares.push(newMiddleware);
 						});
 					}
