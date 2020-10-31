@@ -1,4 +1,4 @@
-export default class WebsocketApiInterfaceMicromodule {
+export default class WebsocketInterface {
 	#middlewares;
 
 	#requests;

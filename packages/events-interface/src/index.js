@@ -1,4 +1,4 @@
-export default class EventsApiInterfaceMicromodule {
+export default class EventsInterface {
 	constructor({ namespace, events, controllers, application, infrastructure }) {
 		this.namespace = namespace;
 		this.eventBus = infrastructure.eventBus;

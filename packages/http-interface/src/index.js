@@ -1,35 +1,38 @@
-export default class HttpApiInterfaceMicromodule {
+export default class HttpInterface {
+	#webServer;
+
 	constructor(params) {
-		const { infrastructure, application, responses, routes, controllers } = params;
-		const constrollersDependencies = {
+		const { infrastructure, middlewares, application, routes, controllers } = params;
+		const dependencies = {
 			infrastructure,
-			responses,
 			application,
 		};
-		this.webServer = infrastructure.webServer;
-		this.routes = [];
-		Object.keys(routes).forEach((route) => {
-			this.routes.push(routes[`${route}`]);
-		});
-		this.controllers = {};
+		this.#webServer = infrastructure.webServer;
+		this.routes = routes;
+		const initializedControllers = {};
 		Object.keys(controllers).forEach((controller) => {
-			this.controllers[`${controller}`] = controllers[`${controller}`](constrollersDependencies);
+			initializedControllers[`${controller}`] = controllers[`${controller}`](dependencies);
 		});
-		this.webServer.register({
+		const initializedMiddlewares = {};
+		Object.keys(middlewares).forEach((middleware) => {
+			initializedMiddlewares[`${middleware}`] = middlewares[`${middleware}`](dependencies);
+		});
+		this.#webServer.register({
 			routes: this.routes,
-			controllers: this.controllers,
+			controllers: initializedControllers,
+			middlewares: initializedMiddlewares,
 		});
 	}
 
 	async run() {
-		await this.webServer.run();
-		const successEvent = {
-			name: 'httpApiInitialized',
+		await this.#webServer.run();
+		const res = {
+			status: 'success',
 			createdAt: new Date(),
 			payload: {
 				routes: this.routes,
 			},
 		};
-		return successEvent;
+		return res;
 	}
 }
