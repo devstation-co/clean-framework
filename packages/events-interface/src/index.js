@@ -22,14 +22,22 @@ export default class EventsInterface {
 					try {
 						await handler({ event: params.event });
 						return {
-							status: 'eventExecuted',
+							status: 'success',
 							timestamp: Date.now(),
+							payload: {
+								source: 'events-interface',
+								event: event.type,
+							},
 						};
 					} catch (error) {
 						return {
-							status: 'eventRefused',
+							status: 'error',
 							timestamp: Date.now(),
-							reasons: [error],
+							payload: {
+								source: 'events-interface',
+								event: event.type,
+								reasons: [error],
+							},
 						};
 					}
 				},
@@ -43,7 +51,7 @@ export default class EventsInterface {
 			events: this.events,
 		});
 		const successEvent = {
-			name: 'eventsApiInitialized',
+			name: 'success',
 			createdAt: new Date(),
 			payload: {},
 		};
