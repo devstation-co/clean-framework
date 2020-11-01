@@ -10,10 +10,10 @@ export default class CommandsInterface {
 			let controller;
 			if (typeof controllers[command.controller] === 'function') {
 				controller = controllers[command.controller];
-			} else if (!command.controller && typeof controllers[command.name] === 'function') {
-				controller = controllers[command.name];
+			} else if (!command.controller && typeof controllers[command.type] === 'function') {
+				controller = controllers[command.type];
 			} else {
-				throw new Error(`Command ${command.name} controller undefined`);
+				throw new Error(`Command ${command.type} controller undefined`);
 			}
 			const handler = controller({ application, infrastructure });
 			this.commands.push({
