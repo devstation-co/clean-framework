@@ -16,7 +16,7 @@ export default class BaseAggregate {
 	}
 
 	async hydrate() {
-		const events = await this.#eventStore.getAggregateEvents({
+		const events = await this.#eventStore.getEventsByAggregateId({
 			aggregateId: this.#id,
 		});
 		events.forEach((event) => {
