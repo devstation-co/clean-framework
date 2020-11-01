@@ -1,4 +1,4 @@
-export default class CommandsApiInterfaceMicromodule {
+export default class CommandsInterface {
 	#commandBus;
 
 	constructor(params) {
@@ -30,8 +30,8 @@ export default class CommandsApiInterfaceMicromodule {
 								status: 'error',
 								timestamp: new Date(),
 								payload: {
-									source: 'commands-api',
-									command: cmd.name,
+									source: 'commands-interface',
+									command: command.type,
 									reasons:
 										handlerResponse.name === 'VALIDATION_ERROR'
 											? JSON.parse(handlerResponse.message)
@@ -50,8 +50,8 @@ export default class CommandsApiInterfaceMicromodule {
 							status: 'error',
 							timestamp: new Date(),
 							payload: {
-								source: 'commands-api',
-								command: command.name,
+								source: 'commands-interface',
+								command: command.type,
 								reasons: [error.message],
 							},
 						};

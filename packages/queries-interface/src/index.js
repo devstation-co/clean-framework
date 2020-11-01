@@ -1,21 +1,24 @@
 export default class QueriesApiInterfaceMicromodule {
+	#commandBus;
+
 	constructor(params) {
 		const { namespace, queries, controllers, application, infrastructure } = params;
 		this.namespace = namespace;
-		this.commandBus = infrastructure.commandBus;
+		this.#commandBus = infrastructure.commandBus;
 		this.queries = [];
 		queries.forEach((query) => {
 			let controller;
 			if (typeof controllers[query.controller] === 'function') {
 				controller = controllers[query.controller];
-			} else if (!query.controller && typeof controllers[query.name] === 'function') {
-				controller = controllers[query.name];
+			} else if (!query.controller && typeof controllers[query.type] === 'function') {
+				controller = controllers[query.type];
 			} else {
-				throw new Error(`Query ${query.name} controller undefined`);
+				throw new Error(`Query ${query.type} controller undefined`);
 			}
 			const handler = controller({ application, infrastructure });
 			this.queries.push({
-				name: query.name,
+				type: query.type,
+				params: query.params,
 				handler: async (receivedQuery) => {
 					try {
 						const handlerResponse = await handler(receivedQuery);
@@ -27,8 +30,8 @@ export default class QueriesApiInterfaceMicromodule {
 								status: 'error',
 								timestamp: new Date(),
 								payload: {
-									source: 'queries-api',
-									query: query.name,
+									source: 'queries-interface',
+									query: query.type,
 									reasons:
 										handlerResponse.name === 'VALIDATION_ERROR'
 											? JSON.parse(handlerResponse.message)
@@ -48,8 +51,8 @@ export default class QueriesApiInterfaceMicromodule {
 							status: 'error',
 							timestamp: new Date(),
 							payload: {
-								source: 'queries-api',
-								query: query.name,
+								source: 'queries-interface',
+								query: query.type,
 								reasons: [error.message],
 							},
 						};
@@ -60,12 +63,12 @@ export default class QueriesApiInterfaceMicromodule {
 	}
 
 	async run() {
-		await this.commandBus.subscribeToCommands({
+		await this.#commandBus.subscribeToCommands({
 			namespace: this.namespace,
 			commands: this.queries,
 		});
 		const successEvent = {
-			name: 'queriesApiInitialized',
+			name: 'success',
 			createdAt: new Date(),
 			payload: {},
 		};
