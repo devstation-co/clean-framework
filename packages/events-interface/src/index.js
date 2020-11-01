@@ -51,7 +51,7 @@ export default class EventsInterface {
 			events: this.events,
 		});
 		const successEvent = {
-			name: 'success',
+			status: 'success',
 			createdAt: new Date(),
 			payload: {},
 		};
