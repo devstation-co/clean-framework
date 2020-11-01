@@ -17,7 +17,8 @@ export default class EventsInterface {
 			const handler = controller({ application, infrastructure });
 			this.events.push({
 				type: event.type,
-				params: event.params,
+				payload: event.payload,
+				meta: event.meta,
 				handler: async (params) => {
 					try {
 						await handler(params.event);
