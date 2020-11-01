@@ -20,7 +20,7 @@ export default class EventsInterface {
 				params: event.params,
 				handler: async (params) => {
 					try {
-						await handler({ event: params.event });
+						await handler(params.event);
 						return {
 							status: 'success',
 							timestamp: Date.now(),
