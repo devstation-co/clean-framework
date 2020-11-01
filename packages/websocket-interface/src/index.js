@@ -41,14 +41,15 @@ export default class WebsocketInterface {
 						controller = plugin.controllers[request.controller];
 					} else if (
 						!request.controller &&
-						typeof plugin.controllers[request.name] === 'function'
+						typeof plugin.controllers[request.type] === 'function'
 					) {
-						controller = plugin.controllers[request.name];
+						controller = plugin.controllers[request.type];
 					} else {
-						throw new Error(`Request ${request.name} controller undefined`);
+						throw new Error(`Request ${request.type} controller undefined`);
 					}
 					const newRequest = {
-						name: `${pluginName}.${request.name}`,
+						type: `${pluginName}.${request.type}`,
+						params: request.params,
 						middlewares: request.middlewares,
 						controller: controller({
 							infrastructure,
@@ -84,13 +85,14 @@ export default class WebsocketInterface {
 				let controller;
 				if (typeof controllers[request.controller] === 'function') {
 					controller = controllers[request.controller];
-				} else if (!request.controller && typeof controllers[request.name] === 'function') {
-					controller = controllers[request.name];
+				} else if (!request.controller && typeof controllers[request.type] === 'function') {
+					controller = controllers[request.type];
 				} else {
-					throw new Error(`Request ${requests.name} controller undefined`);
+					throw new Error(`Request ${requests.type} controller undefined`);
 				}
 				const newRequest = {
-					name: request.name,
+					type: request.type,
+					params: request.params,
 					middlewares: request.middlewares,
 					controller: controller({
 						infrastructure,
