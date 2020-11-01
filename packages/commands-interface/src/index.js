@@ -1,8 +1,10 @@
 export default class CommandsApiInterfaceMicromodule {
+	#commandBus;
+
 	constructor(params) {
 		const { namespace, commands, controllers, application, infrastructure } = params;
 		this.namespace = namespace;
-		this.commandBus = infrastructure.commandBus;
+		this.#commandBus = infrastructure.commandBus;
 		this.commands = [];
 		commands.forEach((command) => {
 			let controller;
@@ -15,7 +17,8 @@ export default class CommandsApiInterfaceMicromodule {
 			}
 			const handler = controller({ application, infrastructure });
 			this.commands.push({
-				name: command.name,
+				type: command.type,
+				params: command.params,
 				handler: async (cmd) => {
 					try {
 						const handlerResponse = await handler(cmd);
@@ -59,12 +62,12 @@ export default class CommandsApiInterfaceMicromodule {
 	}
 
 	async run() {
-		await this.commandBus.subscribeToCommands({
+		await this.#commandBus.subscribeToCommands({
 			namespace: this.namespace,
 			commands: this.commands,
 		});
 		const successEvent = {
-			name: 'commandsApiInitialized',
+			status: 'success',
 			createdAt: new Date(),
 			payload: {},
 		};

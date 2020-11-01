@@ -1,7 +1,9 @@
 export default class EventsInterface {
+	#eventBus;
+
 	constructor({ namespace, events, controllers, application, infrastructure }) {
 		this.namespace = namespace;
-		this.eventBus = infrastructure.eventBus;
+		this.#eventBus = infrastructure.eventBus;
 		this.events = [];
 		events.forEach((event) => {
 			let controller;
@@ -15,6 +17,7 @@ export default class EventsInterface {
 			const handler = controller({ application, infrastructure });
 			this.events.push({
 				type: event.type,
+				params: event.params,
 				handler: async (params) => {
 					try {
 						await handler({ event: params.event });
@@ -35,7 +38,7 @@ export default class EventsInterface {
 	}
 
 	async run() {
-		await this.eventBus.subscribeToEvents({
+		await this.#eventBus.subscribeToEvents({
 			namespace: this.namespace,
 			events: this.events,
 		});
