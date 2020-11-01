@@ -68,7 +68,7 @@ export default class QueriesApiInterfaceMicromodule {
 			commands: this.queries,
 		});
 		const successEvent = {
-			name: 'success',
+			status: 'success',
 			createdAt: new Date(),
 			payload: {},
 		};
