@@ -3,16 +3,27 @@ export default class BaseAggregate {
 
 	#state = {};
 
-	#eventStore = null;
+	#entities = {};
 
-	#aggregateEvents = {};
+	#events = {};
 
-	constructor({ id, eventStore, aggregateEvents }) {
+	#eventStore;
+
+	constructor({ id, eventStore, aggregateEntities, aggregateEvents }) {
 		if (!id) throw new Error('Aggregate id undefined');
 		if (!eventStore) throw new Error('Event store undefined');
-		this.#eventStore = eventStore;
 		this.#id = id;
-		this.#aggregateEvents = aggregateEvents;
+		this.#eventStore = eventStore;
+		this.init({ entities: aggregateEntities, events: aggregateEvents });
+	}
+
+	init({ entities, events }) {
+		this.#events = { ...events };
+		Object.keys(entities).forEach((entity) => {
+			const entityName = `${entity.charAt(0).toLowerCase()}${entity.slice(1)}`;
+			this.#entities[`${entityName}`] = new entities[`${entity}`]({ aggregateId: this.#id });
+			this.#events = { ...this.#events, ...this.#entities[`${entityName}`].getEvents() };
+		});
 	}
 
 	async hydrate() {
@@ -21,9 +32,9 @@ export default class BaseAggregate {
 		});
 		events.forEach((event) => {
 			const eventType = `${event.type.charAt(0).toUpperCase()}${event.type.slice(1)}`;
-			if (typeof this.#aggregateEvents[`${eventType}`] !== 'function')
+			if (typeof this.#events[`${eventType}`] !== 'function')
 				throw new Error(`Aggregate event with type : ${eventType} undefined`);
-			const Event = this.#aggregateEvents[`${eventType}`];
+			const Event = this.#events[`${eventType}`];
 			const constructedEvent = new Event(event);
 			this.#state = constructedEvent.apply({ state: this.#state });
 		});
@@ -39,12 +50,19 @@ export default class BaseAggregate {
 		return eventDetails;
 	}
 
+	getAggregateId() {
+		return this.#id;
+	}
+
 	getState() {
 		return { ...this.#state };
 	}
 
-	getId() {
-		if (!this.#id) throw new Error('Aggregate id undefined');
-		return this.#id;
+	getEntities() {
+		return this.#entities;
+	}
+
+	getEvents() {
+		return this.#events;
 	}
 }
