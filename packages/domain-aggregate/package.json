@@ -1,6 +1,6 @@
 {
 	"name": "@clean-framework/domain-aggregate",
-	"version": "1.0.18",
+	"version": "1.0.19",
 	"license": "MIT",
 	"author": "Mohamed Oualid Sellal <oualid.sellal@gmail.com>",
 	"main": "package.js",
