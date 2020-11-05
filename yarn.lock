@@ -902,6 +902,13 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@devstation.co/validator.infrastructure.micromodule@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@devstation.co/validator.infrastructure.micromodule/-/validator.infrastructure.micromodule-1.0.7.tgz#ea2ce7264098cafcc6121d6f1cae6e073cfc17f7"
+  integrity sha512-1zdDMD1bGIot0We/798kFxBaFwTMHD3TUm2X4OBU668Eh2BqQETiuGqY7sT/lTWCSeYkLglXMcWXsPyo/RhAIQ==
+  dependencies:
+    fastest-validator "^1.7.0"
+
 "@eslint/eslintrc@^0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@eslint/eslintrc/-/eslintrc-0.2.0.tgz#bc7e3c4304d4c8720968ccaee793087dfb5fe6b4"
@@ -4016,6 +4023,11 @@ fast-levenshtein@^2.0.6, fast-levenshtein@~2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
+
+fastest-validator@^1.7.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/fastest-validator/-/fastest-validator-1.8.0.tgz#e2f15c87d88fae67f51a4b078eccb3aaae218ea5"
+  integrity sha512-/5p7l7jmKtYhDhoxoineR7xW+BcZ5gZ4wTkp5lEyI7ESsqt6j5QJazxPmFNUl+hKOsATvw8+5yx0yt+V9MJR6w==
 
 fb-watchman@^2.0.0:
   version "2.0.1"
