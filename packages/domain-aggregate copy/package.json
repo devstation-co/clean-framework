@@ -1,13 +1,13 @@
 {
-	"name": "@clean-framework/domain-event",
-	"version": "1.0.5",
+	"name": "@clean-framework/domain-aggregate",
+	"version": "1.0.16",
 	"license": "MIT",
 	"author": "Mohamed Oualid Sellal <oualid.sellal@gmail.com>",
 	"main": "package.js",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/devstation-co/clean-framework",
-		"directory": "packages/domain-event"
+		"directory": "packages/domain-aggregate"
 	},
 	"scripts": {
 		"build": "babel src --out-dir dist --root-mode upward --ignore **/*.test.js"
