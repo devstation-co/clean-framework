@@ -1,5 +1,5 @@
 {
-	"name": "@clean-framework/domain-aggregate",
+	"name": "@clean-framework/domain-aggregate-entity",
 	"version": "1.0.16",
 	"license": "MIT",
 	"author": "Mohamed Oualid Sellal <oualid.sellal@gmail.com>",
@@ -7,7 +7,7 @@
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/devstation-co/clean-framework",
-		"directory": "packages/domain-aggregate"
+		"directory": "packages/domain-aggregate-entity"
 	},
 	"scripts": {
 		"build": "babel src --out-dir dist --root-mode upward --ignore **/*.test.js"
@@ -25,7 +25,6 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"gitHead": "3494710a53db34e60451e762e1fae49d5dc4e8bd",
 	"dependencies": {
 		"@devstation.co/validator.infrastructure.micromodule": "^1.0.7"
 	}
