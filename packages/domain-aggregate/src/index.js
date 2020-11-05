@@ -1,28 +1,30 @@
 import Validator from '@devstation.co/validator.infrastructure.micromodule';
 
 export default class BaseAggregate {
-	#aggregateType;
+	#aggregateType = null;
 
-	#aggregateId;
+	#aggregateId = null;
 
-	#state;
+	#state = {};
 
-	#validator;
+	#validator = null;
 
-	#events;
+	#events = {};
 
-	#entities;
+	#entities = {};
 
-	#eventStore;
+	#eventStore = null;
 
-	constructor({ id, type, events, entities, eventStore }) {
-		this.init({ id, type, events, entities });
+	#commands = {};
+
+	constructor({ id, type, events, entities, eventStore, commands }) {
+		this.init({ id, type, events, entities, commands });
 		if (!eventStore) throw new Error('Event-store undefined');
 		this.#eventStore = eventStore;
 		this.#validator = new Validator();
 	}
 
-	init({ id, type, events, entities }) {
+	init({ id, type, events, entities, commands }) {
 		if (!id) throw new Error('Aggregate id undefined');
 		if (!type) throw new Error('Aggregate type undefined');
 		this.#aggregateId = id;
@@ -31,8 +33,6 @@ export default class BaseAggregate {
 			id,
 		};
 		this.#events = events;
-		this.#entities = entities;
-
 		entities.forEach((Entity) => {
 			const entity = new Entity({
 				aggregate: {
@@ -43,6 +43,12 @@ export default class BaseAggregate {
 			const entityType = entity.getEntityType();
 			this.#events = { ...this.#events, ...entity.getEvents() };
 			this.#entities[`${entityType}`] = entity;
+		});
+		commands.forEach((command) => {
+			this.#commands[`${command.type}`] = {
+				entity: command.entity,
+				action: command.action,
+			};
 		});
 	}
 
@@ -117,5 +123,17 @@ export default class BaseAggregate {
 		const entity = this.#entities[`${type}`];
 		if (!entity) throw new Error(`Entity ${type} undefined`);
 		return entity;
+	}
+
+	async handle({ type, params }) {
+		const actionType = this.#commands[`${type}`].action;
+		const entityType = this.#commands[`${type}`].entity;
+		const entity = this.getEntity({ type: entityType });
+		const successEvent = await entity[`${actionType}`]({
+			aggregateState: this.getState(),
+			params,
+		});
+		await this.commit({ event: successEvent });
+		return successEvent.getDetails();
 	}
 }
