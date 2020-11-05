@@ -51,6 +51,8 @@ export default class BaseAggregateEntity {
 	async generateEvent({ type, meta, payload }) {
 		const eventType = `${type.charAt(0).toUpperCase()}${type.slice(1)}`;
 		const Event = this.#events[`${eventType}`];
+		if (typeof this.#events[`${eventType}`] !== 'function')
+			throw new Error(`Event ${type} undefined`);
 		const event = new Event({
 			aggregate: {
 				id: this.getAggregateId(),
