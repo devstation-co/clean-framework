@@ -26,6 +26,6 @@
 		"access": "public"
 	},
 	"dependencies": {
-		"@devstation.co/validator.infrastructure.micromodule": "^1.0.7"
+		"@devstation.co/validator.infrastructure.micromodule": "^1.0.24"
 	}
 }

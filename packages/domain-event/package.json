@@ -27,6 +27,6 @@
 	},
 	"gitHead": "3494710a53db34e60451e762e1fae49d5dc4e8bd",
 	"dependencies": {
-		"@devstation.co/validator.infrastructure.micromodule": "^1.0.7"
+		"@devstation.co/validator.infrastructure.micromodule": "^1.0.24"
 	}
 }
