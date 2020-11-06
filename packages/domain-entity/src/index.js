@@ -63,6 +63,7 @@ export default class BaseEntity {
 
 	async save() {
 		if (!this.#id) throw new Error('Entity id undefined');
+		this.#state.id = this.#id;
 		if (this.#created === true && this.#state) {
 			await this.repository.update({ state: this.#state });
 		} else if (this.#created === false && this.#state) {
