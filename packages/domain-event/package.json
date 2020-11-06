@@ -1,6 +1,6 @@
 {
 	"name": "@clean-framework/domain-event",
-	"version": "1.0.17",
+	"version": "1.0.22",
 	"license": "MIT",
 	"author": "Mohamed Oualid Sellal <oualid.sellal@gmail.com>",
 	"main": "package.js",
