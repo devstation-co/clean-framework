@@ -40,14 +40,23 @@ export default class BaseEntity {
 	}
 
 	async apply({ events, save = false }) {
-		events.forEach((event) => {
+		for (let index = 0; index < events.length; index += 1) {
+			const event = events[`${index}`];
 			const eventType = `${event.type.charAt(0).toUpperCase()}${event.type.slice(1)}`;
-			if (typeof this.#entityEvents[`${eventType}`] !== 'function')
-				throw new Error(`Entity event with type : ${eventType} undefined`);
 			const Event = this.#entityEvents[`${eventType}`];
-			const constructedEvent = new Event(event);
-			this.#state = constructedEvent.apply({ state: this.#state });
-		});
+			if (typeof Event === 'function') {
+				const constructedEvent = new Event({
+					aggregate: event.aggregate,
+				});
+				// eslint-disable-next-line no-await-in-loop
+				await constructedEvent.init({
+					timestamp: event.timestamp,
+					meta: event.meta,
+					payload: event.payload,
+				});
+				this.#state = constructedEvent.apply({ state: this.#state });
+			}
+		}
 		if (save) await this.save();
 		return true;
 	}
