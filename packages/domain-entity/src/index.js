@@ -14,7 +14,6 @@ export default class BaseEntity {
 	constructor({ collectionName, database, entityEvents, Repository, softDelete }) {
 		if (!database) throw new Error('Database undefined');
 		if (!collectionName) throw new Error('Entity type undefined');
-		if (typeof softDelete !== 'boolean') throw new Error('Entity type undefined');
 		this.#collectionName = collectionName;
 		this.#database = database;
 		this.#entityEvents = entityEvents;
