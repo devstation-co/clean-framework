@@ -4,8 +4,9 @@ export default class BaseRepository {
 	#softDelete = true;
 
 	constructor({ collectionName, database, softDelete }) {
+		if (softDelete === undefined || softDelete === null) throw new Error('SOFT_DELETE_UNDEFINED');
 		this.#database = database;
-		if (softDelete !== undefined) this.#softDelete = softDelete;
+		this.#softDelete = softDelete;
 		this.collectionName = collectionName;
 	}
 

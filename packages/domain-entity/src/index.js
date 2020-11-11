@@ -11,13 +11,13 @@ export default class BaseEntity {
 
 	#created = false;
 
-	constructor({ type, database, entityEvents, Repository }) {
+	constructor({ type, database, entityEvents, Repository, softDelete }) {
 		if (!database) throw new Error('Database undefined');
 		if (!type) throw new Error('Entity type undefined');
 		this.#type = type;
 		this.#database = database;
 		this.#entityEvents = entityEvents;
-		this.repository = new Repository({ collectionName: type, database });
+		this.repository = new Repository({ collectionName: type, database, softDelete });
 	}
 
 	setId({ id }) {
