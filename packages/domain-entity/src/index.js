@@ -69,7 +69,7 @@ export default class BaseEntity {
 		} else if (this.#created && this.#state.active === true) {
 			await this.repository.update({ state: this.#state });
 		} else if (this.#created === false && this.#state.active) {
-			await this.repository.update({ state: this.#state });
+			await this.repository.insert({ state: this.#state });
 		}
 		return true;
 	}

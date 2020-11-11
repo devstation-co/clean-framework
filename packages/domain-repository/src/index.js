@@ -36,7 +36,7 @@ export default class BaseRepository {
 
 	async delete({ state }) {
 		let res;
-		if (this.#softDelete) {
+		if (this.#softDelete === false) {
 			res = await this.#database.deleteById({
 				collectionName: this.#collectionName,
 				id: state.id,
