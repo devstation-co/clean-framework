@@ -1,6 +1,6 @@
 {
 	"name": "@clean-framework/domain-entity",
-	"version": "1.0.26",
+	"version": "1.0.27",
 	"license": "MIT",
 	"author": "Mohamed Oualid Sellal <oualid.sellal@gmail.com>",
 	"main": "package.js",
