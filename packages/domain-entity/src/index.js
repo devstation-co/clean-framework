@@ -11,13 +11,17 @@ export default class BaseEntity {
 
 	#created = false;
 
+	#softDelete = true;
+
 	constructor({ type, database, entityEvents, Repository, softDelete }) {
 		if (!database) throw new Error('Database undefined');
 		if (!type) throw new Error('Entity type undefined');
+		if (typeof softDelete !== 'boolean') throw new Error('Entity type undefined');
 		this.#type = type;
 		this.#database = database;
 		this.#entityEvents = entityEvents;
-		this.repository = new Repository({ collectionName: type, database, softDelete });
+		this.#softDelete = softDelete;
+		this.repository = new Repository({ collectionName: type, database });
 	}
 
 	setId({ id }) {
@@ -64,10 +68,18 @@ export default class BaseEntity {
 	async save() {
 		if (!this.#id) throw new Error('Entity id undefined');
 		this.#state.id = this.#id;
-		if (this.#created === true && this.#state) {
+		if (this.#created === true && this.#state.active === false && this.#softDelete === true) {
 			await this.repository.update({ state: this.#state });
+		} else if (
+			this.#created === true &&
+			this.#state.active === false &&
+			this.#softDelete === false
+		) {
+			await this.repository.delete({ id: this.#state.id });
 		} else if (this.#created === false && this.#state) {
 			await this.repository.insert({ state: this.#state });
+		} else {
+			await this.repository.update({ state: this.#state });
 		}
 		return true;
 	}

@@ -10,23 +10,6 @@ export default class BaseRepository {
 		this.collectionName = collectionName;
 	}
 
-	async save({ state }) {
-		if (!state.active && this.#softDelete === false) {
-			await this.delete({ id: state.id });
-			return true;
-		}
-		const res = await this.#database.findById({
-			collectionName: this.collectionName,
-			id: state.id,
-		});
-		if (res) {
-			await this.update({ state });
-		} else {
-			await this.insert({ state });
-		}
-		return true;
-	}
-
 	async insert({ state }) {
 		const res = await this.#database.insertOne({
 			collectionName: this.collectionName,
