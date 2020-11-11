@@ -1,12 +1,19 @@
 export default class BaseRepository {
 	#database;
 
-	constructor({ collectionName, database }) {
+	#softDelete = true;
+
+	constructor({ collectionName, database, softDelete }) {
 		this.#database = database;
+		if (softDelete !== undefined) this.#softDelete = softDelete;
 		this.collectionName = collectionName;
 	}
 
 	async save({ state }) {
+		if (!state.active && this.#softDelete === false) {
+			await this.delete({ id: state.id });
+			return true;
+		}
 		const res = await this.#database.findById({
 			collectionName: this.collectionName,
 			id: state.id,
@@ -36,6 +43,14 @@ export default class BaseRepository {
 			collectionName: this.collectionName,
 			filter: { id: state.id },
 			update,
+		});
+		return res;
+	}
+
+	async delete({ id }) {
+		const res = await this.#database.deleteById({
+			collectionName: this.collectionName,
+			id,
 		});
 		return res;
 	}
