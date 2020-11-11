@@ -7,18 +7,18 @@ export default class BaseEntity {
 
 	#entityEvents = {};
 
-	#type;
+	#collectionName;
 
 	#created = false;
 
-	constructor({ type, database, entityEvents, Repository, softDelete }) {
+	constructor({ collectionName, database, entityEvents, Repository, softDelete }) {
 		if (!database) throw new Error('Database undefined');
-		if (!type) throw new Error('Entity type undefined');
+		if (!collectionName) throw new Error('Entity type undefined');
 		if (typeof softDelete !== 'boolean') throw new Error('Entity type undefined');
-		this.#type = type;
+		this.#collectionName = collectionName;
 		this.#database = database;
 		this.#entityEvents = entityEvents;
-		this.repository = new Repository({ collectionName: type, database, softDelete });
+		this.repository = new Repository({ collectionName, database, softDelete });
 	}
 
 	setId({ id }) {
@@ -30,7 +30,7 @@ export default class BaseEntity {
 	async hydrate() {
 		if (!this.#id) throw new Error('Entity id undefined');
 		const state = await this.#database.findById({
-			collectionName: this.#type,
+			collectionName: this.#collectionName,
 			id: this.#id,
 		});
 		if (state) {
