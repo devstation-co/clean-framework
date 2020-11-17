@@ -17,6 +17,8 @@ export default class BaseAggregate {
 
 	#commands = {};
 
+	#uncommitedEvents = [];
+
 	constructor({ id, type, events, entities, eventStore, commands }) {
 		this.init({ id, type, events, entities, commands });
 		if (!eventStore) throw new Error('Event-store undefined');
@@ -109,9 +111,7 @@ export default class BaseAggregate {
 	}
 
 	async commit({ event }) {
-		this.apply({ event });
-		const eventDetails = event.getDetails();
-		await this.#eventStore.commit({ event: eventDetails });
+		await this.#eventStore.commit({ event });
 		return true;
 	}
 
@@ -133,7 +133,21 @@ export default class BaseAggregate {
 			aggregateState: this.getState(),
 			params,
 		});
-		await this.commit({ event: successEvent });
+		this.apply({ event: successEvent });
+		this.#uncommitedEvents.push(successEvent.getDetails());
 		return successEvent.getDetails();
+	}
+
+	async commitEvents() {
+		for (let index = 0; index < this.#uncommitedEvents.length; index += 1) {
+			const uncommitedEvent = this.#uncommitedEvents[`${index}`];
+			// eslint-disable-next-line no-await-in-loop
+			await this.commit({ event: uncommitedEvent });
+			this.#uncommitedEvents.splice(this.#uncommitedEvents.indexOf(uncommitedEvent), 1);
+		}
+	}
+
+	getUncommitedEvents() {
+		return this.#uncommitedEvents;
 	}
 }
