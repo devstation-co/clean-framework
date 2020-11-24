@@ -134,7 +134,8 @@ export default class BaseAggregate {
 			params,
 		});
 		this.apply({ event: successEvent });
-		if (!commit) this.#uncommitedEvents.push(successEvent.getDetails());
+		this.#uncommitedEvents.push(successEvent.getDetails());
+		if (commit) await this.commitEvents();
 		return successEvent.getDetails();
 	}
 
