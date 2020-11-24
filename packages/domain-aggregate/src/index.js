@@ -125,7 +125,7 @@ export default class BaseAggregate {
 		return entity;
 	}
 
-	async handle({ type, params }) {
+	async handle({ type, params, commit = true }) {
 		const actionType = this.#commands[`${type}`].action;
 		const entityType = this.#commands[`${type}`].entity;
 		const entity = this.getEntity({ type: entityType });
@@ -134,7 +134,7 @@ export default class BaseAggregate {
 			params,
 		});
 		this.apply({ event: successEvent });
-		this.#uncommitedEvents.push(successEvent.getDetails());
+		if (!commit) this.#uncommitedEvents.push(successEvent.getDetails());
 		return successEvent.getDetails();
 	}
 
