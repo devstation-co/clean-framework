@@ -1,6 +1,6 @@
 {
 	"name": "@clean-framework/queue-interface",
-	"version": "1.0.10",
+	"version": "1.0.33",
 	"license": "MIT",
 	"author": "Mohamed Oualid Sellal <oualid.sellal@gmail.com>",
 	"main": "package.js",
