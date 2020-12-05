@@ -129,14 +129,28 @@ export default class BaseAggregate {
 		const actionType = this.#commands[`${type}`].action;
 		const entityType = this.#commands[`${type}`].entity;
 		const entity = this.getEntity({ type: entityType });
-		const successEvent = await entity[`${actionType}`]({
+		const res = await entity[`${actionType}`]({
 			aggregateState: this.getState(),
 			params,
 		});
-		this.apply({ event: successEvent });
-		this.#uncommitedEvents.push(successEvent.getDetails());
+		const successEvents = [];
+		const generatedEvents = [];
+		if (Array.isArray(res)) {
+			res.forEach((e) => {
+				successEvents.push(e);
+			});
+		} else {
+			successEvents.push(res);
+		}
+		for (let index = 0; index < successEvents.length; index += 1) {
+			const successEvent = successEvents[`${index}`];
+			this.apply({ event: successEvent });
+			const eventDetails = successEvent.getDetails();
+			this.#uncommitedEvents.push(eventDetails);
+			generatedEvents.push(eventDetails);
+		}
 		if (commit) await this.commitEvents();
-		return successEvent.getDetails();
+		return generatedEvents;
 	}
 
 	async commitEvents() {
