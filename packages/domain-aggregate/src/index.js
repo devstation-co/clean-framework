@@ -68,7 +68,7 @@ export default class BaseAggregate {
 	}
 
 	getState() {
-		return this.#state;
+		return Object.freeze(this.#state);
 	}
 
 	async generateEvent({ type, meta, payload }) {
