@@ -5,6 +5,7 @@ export default class DomainBase {
 			this[domainSettings.name] = {
 				aggregates: domainSettings.domain.aggregates,
 				entities: domainSettings.domain.entities,
+				repositories: domainSettings.domain.repositories,
 			};
 			this.domains.push(domainSettings.name);
 		});
@@ -16,6 +17,7 @@ export default class DomainBase {
 		this[plugin.name] = {
 			aggregates: plugin.domain.aggregates,
 			entities: plugin.domain.entities,
+			repositories: plugin.domain.repositories,
 		};
 		this.domains.push(plugin.name);
 	}
